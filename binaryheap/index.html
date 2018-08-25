@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>BinaryHeap (MinHeap)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.5/svg.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato|Inconsolata" rel="stylesheet">
+</head>
+
+<body>
+    <h3>BinaryHeap (MinHeap)</h3>
+    <div>
+        <form id="insert-form">
+            <input name="input" type="number" />
+            <button name="button" type="submit">insert</button>
+        </form>
+        <form id="remove-form">
+            <label>remove top : <button name="button">remove</button></label>
+        </form>
+        <form id="reset-form">
+            <label>initial size : <input name="input" type="number" /></label>
+            <button name="button">reset</button>
+        </form>
+        <form id="speed-form">
+            <label>speed :
+                <input name="radio" type="radio" value="1" checked="checked" /><span>slow</span>
+                <input name="radio" type="radio" value="2" /><span>fast</span>
+            </label>
+        </form>
+    </div>
+    <div id="drawing">
+
+    </div>
+    <script defer src="./index.js"></script>
+</body>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    button,
+    input {
+        font-family: inherit;
+        font-size: 100%;
+    }
+
+    form {
+        padding: .3rem 0 .3rem 0;
+    }
+</style>
+
+</html>
