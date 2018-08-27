@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Merge Sort</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.5/svg.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato|Inconsolata" rel="stylesheet">
+</head>
+
+<body>
+    <h3>Merge Sort</h3>
+    <div>
+        <form>
+            <button id="run-button" type="button">run</button>
+        </form>
+        <form id="speed-form">
+            <label>speed: slow<input name="range" type="range" min="1" max="6" step="0.1" /> fast</label>
+        </form>
+        <form id="init-form">
+            <button name="random" type="button">random</button>
+            <button name="permutation" type="button">permutation</button>
+        </form>
+    </div>
+    <div id="drawing">
+
+    </div>
+    <script defer src="./index.js"></script>
+</body>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    button,
+    input {
+        font-family: inherit;
+        font-size: 100%;
+    }
+
+    form {
+        padding: .3rem 0 .3rem 0;
+    }
+</style>
+
+</html>
