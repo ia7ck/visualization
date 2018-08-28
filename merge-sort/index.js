@@ -35,7 +35,7 @@ async function divide(l, r, dep) {
       bars[i].animate({ duration: timeout }).dmove(-lw, barHightMax + space)
     }
     await sleep(timeout * 1.1) // 1.0だとギリギリでたまにバグる
-    backgroundGroup.rect(lw * 1.4, bgHight).fill("#F5F5F5").attr({ ry: "1%" }).move(bars[l].x(), (barHightMax + space) * dep).dmove(-lw * 0.2, -barHightMax * 0.05) // 背景の中で要素を縦横中央揃えにする
+    backgroundGroup.rect(lw * 1.4, bgHight).fill("#F5F5F5").attr({ rx: "1%", ry: "1%" }).move(bars[l].x(), (barHightMax + space) * dep).dmove(-lw * 0.2, -barHightMax * 0.05) // 背景の中で要素を縦横中央揃えにする
 
     await divide(l, m, dep + 1)
 
@@ -44,12 +44,12 @@ async function divide(l, r, dep) {
       bars[i].animate({ duration: timeout }).dmove(rw, barHightMax + space)
     }
     await sleep(timeout * 1.1)
-    backgroundGroup.rect(rw * 1.4, bgHight).fill("#F5F5F5").attr({ ry: "1%" }).move(bars[m].x(), (barHightMax + space) * dep).dmove(-rw * 0.2, -barHightMax * 0.05)
+    backgroundGroup.rect(rw * 1.4, bgHight).fill("#F5F5F5").attr({ rx: "1%", ry: "1%" }).move(bars[m].x(), (barHightMax + space) * dep).dmove(-rw * 0.2, -barHightMax * 0.05)
 
     if (m - l >= 2 && r - m <= 1) { // うーーーーん size(left)=2, size(right)=1の場合
       bars[r - 1].animate({ duration: timeout }).dy(barHightMax + space)
       await sleep(timeout * 1.1)
-      backgroundGroup.rect(barWidth * 1.4, bgHight).fill("#F5F5F5").attr({ ry: "1%" }).move(bars[r - 1].x(), (barHightMax + space) * (dep + 1)).dmove(-barWidth * 0.2, -barHightMax * 0.05)
+      backgroundGroup.rect(barWidth * 1.4, bgHight).fill("#F5F5F5").attr({ rx: "1%", ry: "1%" }).move(bars[r - 1].x(), (barHightMax + space) * (dep + 1)).dmove(-barWidth * 0.2, -barHightMax * 0.05)
     }
 
     await divide(m, r, dep + 1)
