@@ -9,7 +9,7 @@ const BASE_TIMEOUT = 1000
 let timeout = BASE_TIMEOUT
 
 const D = 100 // 左の木のindexは 0, 1, ..., 右の木のindexは D, D+1, ..., 
-let n = randInt(1, 10), m = randInt(1, 10)
+let n = randInt(1, 12), m = randInt(1, 12)
 let tree = [], parentOf = []
 let root = [] // Union Find 用
 let graph = []
@@ -286,8 +286,8 @@ resetButton.addEventListener("click", () => {
   editForm.radio.value = "add"
   rootElement.style.pointerEvents = "auto"
 
-  n = randInt(11, 12)
-  m = randInt(8, 9)
+  n = randInt(1, 12)
+  m = randInt(1, 12)
   unionForm.u.max = n
   unionForm.u.value = randInt(0, n) + 1
   unionForm.v.max = m
