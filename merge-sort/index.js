@@ -1,8 +1,8 @@
 const W = 800, H = 400
 const draw = SVG("drawing").size(W, H).style({ border: "solid 1px" })
-const barWidth = 10, barHightMax = 48, space = barHightMax * 0.2
+const barWidth = 10, barHightMax = 48
 let barGroup = draw.group().center(W / 3, barHightMax / 2)
-const bgHight = barHightMax * 1.1
+const bgHight = barHightMax * 1.1, space = bgHight * 0.2
 let backgroundGroup = barGroup.group()
 const BASE_TIMEOUT = 1000
 let timeout = BASE_TIMEOUT
