@@ -223,8 +223,8 @@ resetForm.addEventListener("submit", (ev) => {
     }
   }
 })
-speedForm.addEventListener("change", () => {
-  const val = parseInt(speedForm.radio.value, 10)
+speedForm.addEventListener("change", (ev) => {
+  const val = parseInt(ev.target.value, 10)
   if (Number.isInteger(val)) {
     if (val === 1 || val === 2) {
       timeout = BASE_TIMEOUT / val
