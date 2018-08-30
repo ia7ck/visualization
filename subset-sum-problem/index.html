@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Subset Sum Problem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.5/svg.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato|Inconsolata" rel="stylesheet">
+</head>
+
+<body>
+    <h3>Subset Sum Problem</h3>
+    <dl>
+        <dt><dfn style="font-style: normal"><a href="https://en.wikipedia.org/wiki/Subset_sum_problem" target="_blank">Problem</a></dfn></dt>
+        <dd>Given a set of integers and an integer <var>s</var>, does any non-empty subset sum to <var>s</var> ?</dd>
+    </dl>
+    <div id="drawing">
+
+    </div>
+    <p>
+        set : <span id="set"></span>
+    </p>
+    <p>
+        <var>s</var> : <span id="sum"></span>
+    </p>
+    <div>
+        <form>
+            <button id="run-button" type="submit">run</button>
+        </form>
+        <form id="speed-form">
+            <label>speed :
+                <label><input name="radio" type="radio" value="1" checked="checked" />slow</label>
+                <label><input name="radio" type="radio" value="2" />fast</label>
+            </label>
+        </form>
+    </div>
+    <script defer src="./index.js"></script>
+</body>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+
+    button,
+    input {
+        font-family: inherit;
+        font-size: 100%;
+    }
+
+    form {
+        padding: .3rem 0 .3rem 0;
+    }
+
+    #set,
+    #sum {
+        font-family: "Inconsolata";
+    }
+</style>
+
+</html>
