@@ -1,6 +1,6 @@
 const W = 400, H = 400
 const draw = SVG("drawing").size(W, H).style({ border: "solid 1px" })
-const n = randInt(7, 8), len = W / (n + 2)
+const n = randInt(5, 9), len = W / (n + 2)
 const TEXT_SIZE = len / 2
 const BASE_TIMEOUT = 1000
 let timeout = BASE_TIMEOUT
