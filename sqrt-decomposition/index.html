@@ -2,19 +2,35 @@
 <html>
 
 <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8" />
     <title>Square Root Decomposition</title>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.4/svg.js'></script>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.5/svg.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato|Inconsolata" rel="stylesheet">
 </head>
 
 <body>
-    <div style='padding: 1%'>
     <h3>Square Root Decomposition</h3>
-    <div id='main' style='margin-top: 15vh; margin-left: 15vw'>
+    <form id="speed-form">
+        <label>speed :
+            <label><input name="radio" type="radio" value="1" checked="checked" />slow</label>
+            <label><input name="radio" type="radio" value="2" />fast</label>
+        </label>
+    </form>
+    <div id="drawing">
+
     </div>
-    <script defer src='index.js'></script>
-    </div>
+    <script defer src="./index.js"></script>
 </body>
+
+<style>
+    body {
+        font-family: "Lato", sans-serif;
+    }
+    
+    form {
+        padding: .3rem 0 .3rem 0;
+    }
+</style>
 
 </html>

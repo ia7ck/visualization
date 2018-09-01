@@ -1,115 +1,95 @@
-let SIZE = 22
-let D = 5
-let buc = []
-let val = []
+const W = 800, H = 400
+const draw = SVG("drawing").size(W, H).style({ border: "solid 1px" })
+const candGroup = draw.group()
+const w = 25, h = 50
+const BASE_TIMEOUT = 1000
+let timeout = BASE_TIMEOUT
 
-const H = 50
-let BUC_W = D * 25
-let VAL_W = BUC_W / D
+const n = randInt(20, 26)
+const D = Math.ceil(Math.sqrt(n))
+const pallet = ["#f39700", /*"#e60012",*/ "#9caeb7", "#00a7db", "#009944", "#d7c447", "#9b7cb6", "#00ada9", "#bb641d", "#e85298", "#0079c2", "#6cbb5a", "#b6007a", "#e5171f", "#522886", /*"#0078ba",*/ "#019a66", /*"#e44d93",*/ "#814721", /*"#a9cc51",*/ /*"#ee7b1a",*/ /*"#00a0de"*/]
+const bgcolor = "#f5f5f5", stroke = "#0f0f0f"
 
-const DUR = 750; // to fill each cell 
-const COLORS = ['#f39700', '#e60012', '#9caeb7', '#00a7db', '#009944', '#d7c447', '#9b7cb6', '#00ada9', '#bb641d', '#e85298', '#0079c2', '#6cbb5a', '#b6007a', '#e5171f', '#522886', '#0078ba', '#019a66', '#e44d93', '#814721', '#a9cc51', '#ee7b1a', '#00a0de'] // https://www.colordic.org/m/
-const Q = COLORS.length
+let q = 0 // クエリが呼ばれた回数
+let pos = null // 選択されたやつ nullなら未選択
 
-let cv = SVG('main').size(1200, 1600)
-let sub_g = cv.group().dx(5)
-let query_g = sub_g.group().dy(H + H * 3 / 5) // dx(.) tips
-let buc_g = sub_g.group().dy(H * 2)
-let val_g = sub_g.group().dy(H * 3)
-
-let result = []
-let meta_buc = []
-let meta_val = []
-
-function init_draw(size) {
-  SIZE = size
-  D = Math.ceil(Math.sqrt(SIZE))
-  BUC_W = D * 25
-  buc = new Array(D)
-  val = new Array(SIZE)
-  result = new Array(Q)
-  meta_buc = new Array(D)
-  meta_valt = new Array(SIZE)
-
-  VAL_W = BUC_W / D
-  for (let k = 0; k < D; k++) {
-    buc[k] = buc_g.rect(BUC_W, H).attr({ fill: '#f5f5f5', stroke: '#222222' })
-    if (k > 0) buc[k].dx(BUC_W * k)
-  }
-  for (let i = 0; i < SIZE; i++) {
-    val[i] = val_g.rect(VAL_W, H).attr({ fill: '#f5f5f5', stroke: '#222222' })
-    if (i > 0) val[i].dx(VAL_W * i)
+let buc = [], val = []
+let cand = [], seq = []
+function build() {
+  for (let i = 0; i < D; i++) buc[i] = draw.rect(w * D, h).fill(bgcolor).stroke(stroke).move(w + i * w * D, H * 0.4)
+  for (let i = 0; i < n; i++) val[i] = draw.rect(w, h).fill(bgcolor).stroke(stroke).move(w + i * w, H * 0.4 + h)
+  for (let i = 0; i < n; i++) {
+    cand[i] = candGroup.rect(w, h / 2).fill("white").stroke(stroke).attr({ "stroke-dasharray": 2, cursor: "pointer" }).move(w + i * w, H * 0.4 - h)
+    cand[i].data({ pos: i })
+    cand[i].mouseover(function () { this.fill(pallet[q]) })
+    cand[i].mouseout(function () { if (this.data("pos") !== pos) this.fill("white") })
+    cand[i].click(exec)
   }
 }
 
-function init_calc() {
-  for (let k = 0; k < D; k++) meta_buc[k] = '#f5f5f5'
-  for (let i = 0; i < SIZE; i++) meta_val[i] = '#f5f5f5'
-  let offset = rand_int(0, COLORS.length)
-  for (let i = 0; i < Q; i++) {
-    const l = rand_int(0, SIZE - 2)
-    const r = rand_int(l + 1, SIZE)
-    const color = COLORS[(i + offset) % COLORS.length]
-    result[i] = {
-      query: { l, r, color },
-      answer: exec_sqrd(l, r, color)
-    }
-  }
-}
+build()
 
-function exec_sqrd(l, r, color) {
-  let ret = []
+const sleep = (ms) => (new Promise(resolve => setTimeout(resolve, ms)))
+async function query(l, r, color) {
   for (let k = 0; k < D; k++) {
-    let s = k * D, t = (k + 1) * D
-    if (t <= l || r <= s) {
+    if ((k + 1) * D <= l || r <= k * D) {
       continue
-    } else if (l <= s && t <= r) {
-      meta_buc[k] = color
-      ret.push({ target: buc[k], color })
+    } else if (l <= k * D && (k + 1) * D <= r) {
+      for (let i = k * D; i < (k + 1) * D; i++) seq[i].animate(timeout).size(w, h).y(H * 0.4)
+      await sleep(timeout)
+      for (let i = k * D; i < (k + 1) * D; i++) seq[i].remove()
+      buc[k].fill(color)
     } else {
-      ret.push(...push_down(k))
-      for (let i = Math.max(s, l); i < Math.min(t, r); i++) {
-        meta_val[i] = color
-        ret.push({ target: val[i], color })
+      if (buc[k].attr("fill") !== bgcolor) {
+        const previousColor = buc[k].attr("fill")
+        let tmp = []
+        for (let i = k * D; i < (k + 1) * D; i++) tmp[i] = draw.rect(w, h).fill(previousColor).move(w + i * w, H * 0.4)
+        buc[k].fill(bgcolor)
+        for (let i = k * D; i < (k + 1) * D; i++) {
+          tmp[i].animate(timeout).dy(h)
+          await sleep(timeout)
+          tmp[i].remove()
+          val[i].fill(previousColor)
+        }
+      }
+      const s = Math.max(l, k * D), t = Math.min(r, (k + 1) * D)
+      for (let i = s; i < t; i++) {
+        seq[i].animate(timeout).size(w, h).y(H * 0.4 + h)
+        await sleep(timeout)
+        seq[i].remove()
+        val[i].fill(color)
       }
     }
   }
-  return ret
+  await sleep(timeout)
 }
 
-function push_down(k) {
-  let ret = []
-  if (meta_buc[k] === '#f5f5f5') return ret
-  ret.push({ target: buc[k], color: '#f5f5f5' })
-  for (let i = k * D; i < (k + 1) * D; i++) {
-    meta_val[i] = meta_buc[k]
-    ret.push({ target: val[i], color: meta_buc[k] })
+async function exec() {
+  if (pos === null) {
+    pos = this.data("pos")
+  } else {
+    candGroup.style({ "pointer-events": "none" })
+    candGroup.attr({ visibility: "hidden" })
+    pos2 = this.data("pos")
+    const l = Math.min(pos, pos2), r = Math.max(pos, pos2)
+    cand[pos].fill("white")
+    cand[pos2].fill("white")
+    for (let j = l; j <= r; j++) seq[j] = draw.rect(w, h / 2).fill(pallet[q]).move(w + j * w, H * 0.4 - h)
+    await sleep(timeout)
+    for (let j = l; j <= r; j++) seq[j].animate(timeout).dy(h / 2 - 1)
+    await sleep(timeout * 1.5)
+    await query(l, r + 1, pallet[q])
+    q = (q + 1) % pallet.length
+    seq = []
+    pos = null
+    candGroup.attr({ visibility: "visible" })
+    candGroup.style({ "pointer-events": "auto" })
   }
-  meta_buc[k] = '#f5f5f5'
-  return ret
 }
 
-function draw(duration) {
-  let total_num = 0
-  for (let i = 0; i < Q; i++) {
-    const { l, r, color } = result[i].query
-    total_num += i === 0 ? 0 : result[i - 1].answer.length + 2
-    setTimeout(() => { query_g.rect((r - l) * VAL_W, H * 3 / 5).dx(l * VAL_W).attr({ fill: '#f5f5f5' }).animate().attr({ fill: color }) }, (duration * 1.75) * total_num)
-    setTimeout(() => {
-      result[i].answer.forEach((elem, idx) => {
-        const old_color = elem.target.attr('fill'), new_color = elem.color
-        setTimeout(() => { elem.target.animate().attr({ fill: new_color }) }, idx * duration)
-      })
-    }, (duration * 1.75) * total_num + duration * 2)
-  }
-
+function randInt(lb, ub) {
+  return Math.floor(Math.random() * (ub - lb)) + lb;
 }
 
-init_draw(rand_int(15, 30))
-init_calc()
-
-setTimeout(draw, 1000, DUR)
-
-function rand_int(mn, mx) { // [mn, mx)
-  return Math.floor(Math.random() * (mx - mn)) + mn;
-}
+const speedForm = document.getElementById("speed-form")
+speedForm.addEventListener("change", (ev) => { timeout = BASE_TIMEOUT / parseInt(ev.target.value, 10) })
