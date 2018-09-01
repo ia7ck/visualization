@@ -34,10 +34,11 @@ const container = document.getElementById("main")
 const network = new vis.Network(container, data, options)
 
 class SkewNode {
-  constructor({ idx, to, val }) {
+  constructor({ idx, from, to, val }) {
     this.left = null
     this.right = null
     this.idx = idx
+    this.from = from
     this.to = to
     this.val = val
   }
@@ -78,8 +79,8 @@ let timeout = BASE_TIMEOUT;
   for (let i = 0; i < n; i++) g[i] = []
   edges.forEach((edge) => {
     const u = edge.from, v = edge.to, weight = parseInt(edge.label, 10)
-    g[u].push({ to: v, weight: weight, id: edge.id })
-    g[v].push({ to: u, weight: weight, id: edge.id })
+    g[u].push({ from: u, to: v, weight: weight, id: edge.id })
+    g[v].push({ from: v, to: u, weight: weight, id: edge.id })
   })
   let visited = new Array(n).fill(false)
   let h = new SkewHeap()
@@ -90,7 +91,7 @@ let timeout = BASE_TIMEOUT;
   })
   visited[0] = true
   g[0].forEach((edge) => {
-    h.insert({ idx: edge.id, to: edge.to, val: edge.weight })
+    h.insert({ idx: edge.id, from: edge.from, to: edge.to, val: edge.weight })
   })
   while (h.empty() === false) {
     const edge = h.front(); h.remove()
@@ -114,7 +115,7 @@ let timeout = BASE_TIMEOUT;
       visited[edge.to] = true
       g[edge.to].forEach((_edge) => {
         if (visited[_edge.to] === false) {
-          h.insert({ idx: _edge.id, to: _edge.to, val: _edge.weight })
+          h.insert({ idx: _edge.id, from: _edge.from, to: _edge.to, val: _edge.weight })
         }
       })
       await sleep(timeout)
@@ -123,9 +124,8 @@ let timeout = BASE_TIMEOUT;
         id: edge.idx,
         color: { color: "lightcoral" },
       })
-      const from = edges.get(edge.idx).from
       nodes.update({
-        id: from,
+        id: edge.from,
         color: { background: "mistyrose", border: "lightcoral" },
       })
       nodes.update({
@@ -134,7 +134,7 @@ let timeout = BASE_TIMEOUT;
       })
       await sleep(timeout)
       nodes.update({
-        id: from,
+        id: edge.from,
         color: { background: "lightcyan", border: "skyblue" },
       })
       nodes.update({
