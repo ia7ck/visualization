@@ -1,0 +1,15 @@
+body {
+  font-family: "Lato", sans-serif;
+  padding: 1rem;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+  font-size: 100%;
+}
+
+form {
+  padding: .3rem 0 .3rem 0;
+}
